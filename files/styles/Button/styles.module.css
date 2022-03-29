@@ -1,0 +1,15 @@
+.button {
+    background-color: blue;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: 0;
+}
+
+.frame {
+    background-color: #ccc;
+    padding: 100px;
+}
+
+.bigLetter{
+    font-size: 50px;
+}

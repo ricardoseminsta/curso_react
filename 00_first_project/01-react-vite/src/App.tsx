@@ -1,27 +1,15 @@
-import { People } from "./components/People";
+import * as C from './AppStyles'
 
 const App = () => {
-  let list = [
-    {name: 'Ricardo', age: 90},
-    {name: 'Joana', age: 20},
-    {name: 'Vick', age: 3},
-    {name: 'Cleyton', age: 2},
-    {name: 'Geralda', age: 21}
-  ];
-
 
 
   return (
     <div>
-      <h2>Lista de Presença</h2>
-      <ul>
-        {
-          list.map((item, index) =>(
-            <People key={index} data={item}/>
-          ))
-        }
-      </ul>
-    </div>
+      <C.Container>
+        Texto do componente
+        <C.Button>Clique aqui</C.Button>
+      </C.Container>
+      </div>
   );
 }
 
