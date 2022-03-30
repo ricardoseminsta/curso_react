@@ -4,9 +4,31 @@ type ContainerProps = {
     bgColor: string;
 }
 export const Container = styled.div<ContainerProps>`
-    background-color: ${props => props.bgColor};
+max-width: 600px;
+margin: 0 auto;
+display: flex;
+background-color: ${props => props.bgColor};
     color: white;
     padding: 20px;
+
+    span {
+        font-weight: bold;
+        color: #000;
+    }
+
+    .link {
+        color: #fff;
+        font-size: 18px;
+
+        &:hover {
+            color: #0f0;
+        }
+    }
+
+    @media (max-width: 500px) {
+        background-color: green;
+        flex-direction: column;
+    }
 `;
 
 type ButtonProps = {
