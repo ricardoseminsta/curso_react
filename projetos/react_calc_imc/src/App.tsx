@@ -33,7 +33,7 @@ return(
           />
         <input
           type="number"
-          placeholder="Digite o seu Peso. Ex: 1.5 (em kg)"
+          placeholder="Digite o seu Peso. Ex: 70 (em kg)"
           value={weightField > 0 ? weightField : ''}
           onChange={e => setWeightField(parseFloat(e.target.value))}
           />
