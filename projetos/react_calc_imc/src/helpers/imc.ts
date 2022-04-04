@@ -14,13 +14,13 @@ export const levels: Level[] = [
 ];
 
 export const calculateImc = (height: number, weight: number) => {
-    const imc = weight * (height * height);
-
+    const imc = weight / (height * height);
+    console.log(imc);
     for(let i in levels) {
-        if(imc >= levels[i].imc[0] && 
-           imc <= levels[i].imc[1]) {
-               levels[i].yourImc = imc;
-               return levels[i];
+        if(parseFloat(imc.toFixed(1)) >= levels[i].imc[0] && parseFloat(imc.toFixed(1)) <= levels[i].imc[1]) {
+            let levelCopy: Level = {...levels[i]};
+            levelCopy.yourImc = parseFloat(imc.toFixed(2));               
+            return levelCopy;
            }
     }
 
