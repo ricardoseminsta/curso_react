@@ -1,8 +1,25 @@
+import { useEffect, useState } from 'react';
+
 const App = () => {
 
+  const [name, setName] = useState('Ricardo');
+
+  const handleClick = () => {
+    setName('José');
+  }
+
+  useEffect(() => {
+    alert('Executou');
+  }, [name]);
+
   return (
-    <div className="bg-indigo-500 p-5 text-xl font-bold">Texto aqui</div>
-  );
+    <div>
+      Nome: {name}
+      <button onClick={handleClick}>Clique aqui</button>
+
+    </div>
+  
+    );
 }
 
 export default App;
