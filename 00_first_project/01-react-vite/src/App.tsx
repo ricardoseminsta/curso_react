@@ -1,25 +1,32 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 const App = () => {
+  const [movies, setMovies] = useState([]);
 
-  const [name, setName] = useState('Ricardo');
-
-  const handleClick = () => {
-    setName('José');
+  const loadMovies = () => {
+    fetch('https://api.b7web.com.br/cinema/')
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      setMovies(json);
+    });
   }
-
-  useEffect(() => {
-    alert('Executou');
-  }, [name]);
 
   return (
     <div>
-      Nome: {name}
-      <button onClick={handleClick}>Clique aqui</button>
+      <button className="block bg-blue-400 p-2 rounded"
+      onClick={loadMovies}>Carregar Filmes</button>
 
+      Total de Filmes: {movies.length}
+      <div>
+
+      </div>
     </div>
   
     );
 }
 
 export default App;
+
+// https://api.b7web.com.br/cinema/
