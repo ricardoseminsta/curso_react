@@ -1,41 +1,83 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Movie } from './types/Movie'
-
+import { Post } from './components/types/Post'
 
 const App = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [post, setPost] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const [addTitleText, setAddTitleText] = useState('');
+  const [addBodyText, setAddBodyText] = useState('');
+
 
   useEffect(() => {
-    loadMovies();
+    loadPosts();
   }, []);
 
-  const loadMovies = () => {
-    fetch('https://api.b7web.com.br/cinema/')
-    .then((response) => {
-      return response.json();
-    })
-    .then((json) => {
-      setMovies(json);
-    });
+  const loadPosts = async () => {
+    setLoading(true);
+    let response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    let json = await response.json();
+    setLoading(false);
+    setPost(json);
+  }
+
+  const handleAddTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setAddTitleText(e.target.value);
+  }
+
+  const handleAddBodyChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setAddBodyText(e.target.value);
+  }
+
+  const handleAddClick = () => {
+    alert(addTitleText + ' ' + addBodyText)
   }
 
   return (
-    <div >
-      <button className="block bg-blue-400 p-2 rounded"
-      onClick={loadMovies}>Carregar Filmes</button>
+    <div className="p-5">
+      {loading &&
+        <div>Carregando...</div>
+      }
 
-      Total de Filmes: {movies.length}
-      <div className="grid grid-cols-6 gap-3">
-        {movies.map((item, index) => (
-          <div key={index}>
-            <img src={item.avatar} className="w-32 block" />
-              {item.titulo}
+      <fieldset className="border-2 mb-3 p-3">
+        <legend>Adicionar novo post</legend>
+        <input 
+          onChange={handleAddTitleChange}
+          value={addTitleText}
+          className="block border"
+          type="text" 
+          placeholder="Digite um título"
+         />
+        <textarea
+          className="block border"
+          value={addBodyText}
+          onChange={handleAddBodyChange}
+          ></textarea>
+        <button className="block border" onClick={handleAddClick}>Adicionar</button>
+      </fieldset>
+
+      {!loading && post.length > 0 &&
+        <>
+          Total de Posts: {post.length}
+          <div>
+            {post.map((item, index) => (
+              <div key={index} className="my-8">
+                <h4 className="font-bold">{item.title}</h4>
+                <small>#{item.id} -  Usuário: {item.userId}</small>
+                <p>{item.body}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      }
+
+      {!loading && post.length === 0 &&
+        <div>Tente novamente mais tarde. não há posts para exibir</div>
+      }
+
     </div>
-  
-    );
+
+  );
 }
 
 export default App;
