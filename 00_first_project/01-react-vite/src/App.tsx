@@ -1,13 +1,12 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Post } from './components/types/Post'
+import { Post } from './types/Post'
+import { PostForm } from './components/PostForm';
+import { PostItem } from './components/PostItem';
+import { api } from './api'
 
 const App = () => {
   const [post, setPost] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const [addTitleText, setAddTitleText] = useState('');
-  const [addBodyText, setAddBodyText] = useState('');
-
 
   useEffect(() => {
     loadPosts();
@@ -15,22 +14,21 @@ const App = () => {
 
   const loadPosts = async () => {
     setLoading(true);
-    let response = await fetch('https://jsonplaceholder.typicode.com/posts');
-    let json = await response.json();
+    let json = await api.getAllPosts();
     setLoading(false);
     setPost(json);
+
+
   }
 
-  const handleAddTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAddTitleText(e.target.value);
-  }
+  const handleAddPost = async (title: string, body: string) => {
+    let json = await api.addNewPosts(title, body, 1);
 
-  const handleAddBodyChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setAddBodyText(e.target.value);
-  }
-
-  const handleAddClick = () => {
-    alert(addTitleText + ' ' + addBodyText)
+    if (json.id) {
+      alert('Um novo post foi adicionado');
+    } else {
+      alert('Ocorreu algum erro!')
+    }
   }
 
   return (
@@ -39,33 +37,14 @@ const App = () => {
         <div>Carregando...</div>
       }
 
-      <fieldset className="border-2 mb-3 p-3">
-        <legend>Adicionar novo post</legend>
-        <input 
-          onChange={handleAddTitleChange}
-          value={addTitleText}
-          className="block border"
-          type="text" 
-          placeholder="Digite um título"
-         />
-        <textarea
-          className="block border"
-          value={addBodyText}
-          onChange={handleAddBodyChange}
-          ></textarea>
-        <button className="block border" onClick={handleAddClick}>Adicionar</button>
-      </fieldset>
+      <PostForm onAdd={handleAddPost} />
 
       {!loading && post.length > 0 &&
         <>
           Total de Posts: {post.length}
           <div>
             {post.map((item, index) => (
-              <div key={index} className="my-8">
-                <h4 className="font-bold">{item.title}</h4>
-                <small>#{item.id} -  Usuário: {item.userId}</small>
-                <p>{item.body}</p>
-              </div>
+              <PostItem key={index} data={item} />
             ))}
           </div>
         </>
