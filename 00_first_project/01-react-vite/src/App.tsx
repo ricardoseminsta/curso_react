@@ -1,43 +1,52 @@
-import { useReducer } from "react";
-
-type reducerState = {
-  count: number;
-}
-
-type reducerAction = {
-  type: string;
-
-}
-
-const initialState = { count: 0 };
-const reducer = (state: reducerState, action: reducerAction) => {
-  switch (action.type) {
-    case 'ADD':
-      return {...state, count: state.count + 1};
-    break;
-    case 'DEL':
-      if (state.count > 0) {
-       return {...state, count: state.count - 1};
-    }
-    break
-    case 'RESET':
-      return initialState;
-    break;
-  }
-
-  return state;
-}
+import { ChangeEvent, useState } from "react";
+import { usePeopleList } from "./hooks/peopleList";
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [list, dispatch] = usePeopleList();
+  const [nameInput, setNameInput] = useState('');
 
+const handleAddButton = () => {
+  if(nameInput){
+    dispatch({
+      type: 'ADD',
+      payload: {
+        name: nameInput
+      }
+    });
+    setNameInput('');
+  }
+}
+
+const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  setNameInput(e.target.value);
+}
+
+const deletePerson = (id: string) => {
+  dispatch({
+    type: 'DEL',
+    payload: {id}
+  })
+}
+
+const handleOrderButton = () => {
+  dispatch({type: 'ORDER'})
+}
   return (
     <div className="p-5">
-      Contagem: {state.count}
+      <input className="border-3" type="text" value={nameInput} onChange={handleInputChange}/>
+      <button onClick={handleAddButton}>Adicionar</button>
       <hr/>
-      <button className="p-3" onClick={() => dispatch({type: 'ADD'})}>Adicionar</button>
-      <button className="p-3" onClick={() => dispatch({type: 'DEL'})}>Remover</button>
-      <button className="p-3" onClick={() => dispatch({type: 'RESET'})}>Resetar</button>
+      <button onClick={handleOrderButton}>Ordenar</button><br/>
+      Lista de Pessoas
+      <ul>
+        {list.map((item, index) => (
+          <li key={index}>
+            {item.name}
+            <button onClick={() => deletePerson(item.id)}> [ deletar ] </button>
+          </li>
+          
+        ))}
+      </ul>
     </div>
   );
 }
