@@ -53,9 +53,12 @@ export const GridArea = styled.div`
 `;
 
 export const Grid = styled.div`
-    width:430px;
+    width: 430px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
-    background-color: #CCC;
+
+    @media (max-width: 750px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
 `;
