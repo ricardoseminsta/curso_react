@@ -33,7 +33,7 @@ const handleOrderButton = () => {
 }
   return (
     <div className="p-5">
-      <input className="border-3" type="text" value={nameInput} onChange={handleInputChange}/>
+      <input className="border-2" type="text" value={nameInput} onChange={handleInputChange}/>
       <button onClick={handleAddButton}>Adicionar</button>
       <hr/>
       <button onClick={handleOrderButton}>Ordenar</button><br/>
