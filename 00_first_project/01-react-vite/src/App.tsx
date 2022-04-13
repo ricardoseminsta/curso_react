@@ -1,52 +1,23 @@
-import { ChangeEvent, useState } from "react";
-import { usePeopleList } from "./hooks/peopleList";
+import { Link } from "react-router-dom";
+import { MainRoutes } from "./routes/MainRoutes";
+
 
 const App = () => {
-  const [list, dispatch] = usePeopleList();
-  const [nameInput, setNameInput] = useState('');
 
-const handleAddButton = () => {
-  if(nameInput){
-    dispatch({
-      type: 'ADD',
-      payload: {
-        name: nameInput
-      }
-    });
-    setNameInput('');
-  }
-}
-
-const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-  setNameInput(e.target.value);
-}
-
-const deletePerson = (id: string) => {
-  dispatch({
-    type: 'DEL',
-    payload: {id}
-  })
-}
-
-const handleOrderButton = () => {
-  dispatch({type: 'ORDER'})
-}
   return (
-    <div className="p-5">
-      <input className="border-2" type="text" value={nameInput} onChange={handleInputChange}/>
-      <button onClick={handleAddButton}>Adicionar</button>
-      <hr/>
-      <button onClick={handleOrderButton}>Ordenar</button><br/>
-      Lista de Pessoas
-      <ul>
-        {list.map((item, index) => (
-          <li key={index}>
-            {item.name}
-            <button onClick={() => deletePerson(item.id)}> [ deletar ] </button>
-          </li>
-          
-        ))}
-      </ul>
+    <div className="p-4">
+      <header>
+        <h1>Titulo do Site</h1>
+      </header>
+      <hr />
+      <div className="py-4">
+        <MainRoutes />
+      </div>
+      <hr />
+      <footer>
+        <Link to="/sobre">sobre</Link><br />
+        Todos os direitos reservados
+      </footer>
     </div>
   );
 }
