@@ -5,8 +5,8 @@ export type UserType = {
 }
 
 export const userInitialState: UserType = {
-    name: 'Ricardo',
-    age: 34
+    name: '',
+    age: 0
 }
 
 export const userReducer = (state: UserType, action: reducerActionType) => {
@@ -15,7 +15,7 @@ export const userReducer = (state: UserType, action: reducerActionType) => {
             return {...state, name: action.payload.name};
         break
         case 'CHANGE_AGE':
-            return {...state, name: action.payload.age};
+            return {...state, age: action.payload.age};
         break
     }
     
