@@ -12,14 +12,18 @@ const App = () => {
       dispatch({
         type: 'CHANGE_STATUS',
         payload: {
-          status: 'dark'
+          status: 'dark',
+          bgColor: '#444',
+          color: '#BBB'
         }
       })
     } else {
       dispatch({
         type: 'CHANGE_STATUS',
         payload: {
-          status: 'light'
+          status: 'light',
+          bgColor: '#EEE',
+          color: '#444'
         }
       })
     }
@@ -27,8 +31,8 @@ const App = () => {
 
   return(
     <div style={{
-      backgroundColor: state.theme.status === 'light' ? '#EEE' : '#444',
-      color: state.theme.status === 'light' ? '#000' : '#BBB'
+      backgroundColor: state.theme.bgColor,
+      color: state.theme.color
       }}>
         <BrowserRouter>
           <h1>Título da Página</h1>
