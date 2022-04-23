@@ -31,8 +31,11 @@ const SignIn = () => {
             setError(json.error);
         } else {
             doLogin(json.token, rememberPassword);
-            navigate('/');
+            //navigate('/');
+            window.location.href = '/';
         }
+
+        setDisable(false);
 
     }
 
