@@ -2,7 +2,7 @@ import {useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import qs from 'qs'
 
-const BASEAPI = 'http://alunos.b7web.com.br:501';
+const BASEAPI = 'https://api.b7web.com.br:501';
 
 //const navigate = useNavigate();
 
@@ -60,6 +60,12 @@ const OlxApi = {
             {email, password}
         );
         return json;
+    },
+    getStates: async () => {
+        const json = await apiFetchGet(
+            '/states'
+        );
+        return json.states;
     }
 };
 
