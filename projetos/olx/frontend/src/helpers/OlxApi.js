@@ -2,7 +2,7 @@ import {useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import qs from 'qs'
 
-const BASEAPI = 'https://api.b7web.com.br:501';
+const BASEAPI = 'http://alunos.b7web.com.br:501';
 
 //const navigate = useNavigate();
 
@@ -27,6 +27,7 @@ const apiFetchPost = async (endpoint, body) => {
     if(json.notallowed) {
         //navigate('/signin');
         window.location.href = '/signin';
+        return;
     }
 
     return json;
@@ -46,6 +47,7 @@ const apiFetchGet = async (endpoint, body = []) => {
     if(json.notallowed) {
         //navigate('/signin');
         window.location.href= '/signin';
+        return;
     }
 
     return json;
@@ -61,11 +63,26 @@ const OlxApi = {
         );
         return json;
     },
+
+    register: async (name, email, password, stateLoc) => {
+        const json = await apiFetchPost(
+            '/user/signup',
+            {name, email, password, state: stateLoc}
+        );
+        return json;
+    },
+
     getStates: async () => {
         const json = await apiFetchGet(
             '/states'
         );
         return json.states;
+    },
+    getCategories: async () => {
+        const json = await apiFetchGet(
+            '/categories'
+        );
+        return json.categories;
     }
 };
 

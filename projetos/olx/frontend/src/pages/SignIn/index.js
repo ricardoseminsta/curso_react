@@ -24,6 +24,7 @@ const SignIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setDisable(true);
+        setError('');
         
         const json = await api.login(email, password);
 

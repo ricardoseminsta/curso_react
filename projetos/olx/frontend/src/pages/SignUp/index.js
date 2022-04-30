@@ -34,13 +34,20 @@ const SignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setDisable(true);
-        
-        const json = await api.login(email, password);
+        setError('');
+
+        if(password !== confirmPassword) {
+            setError('Senhas não batem');
+            setDisable(false);
+            return;
+        }
+
+        const json = await api.register(name, email, password, stateLoc);
 
         if(json.error) {
             setError(json.error);
         } else {
-            //doLogin(json.token, rememberPassword);
+            doLogin(json.token);
             //navigate('/');
             window.location.href = '/';
         }
@@ -63,7 +70,7 @@ const SignUp = () => {
                         <div className="area--title">Nome Completo:</div>
                         <div className="area--input">
                             <input
-                                type="email"
+                                type="text"
                                 disabled={disabled}
                                 value={name}
                                 onChange={e=>setName(e.target.value)}
