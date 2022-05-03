@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import useApi from '../../helpers/OlxApi'
 
 import * as C from '../../components/MainComponents'
+import AdItem from '../../components/partials/AdItem';
 import { PageArea, SearchArea } from './styled';
 import { Link } from 'react-router-dom';
 
@@ -14,6 +15,7 @@ const Home = () => {
 
     const [stateList, setStateList] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [adList, setAdList] = useState([]);
 
     useEffect(()=>{
         const getStates = async () => {
@@ -29,6 +31,17 @@ const Home = () => {
             setCategories(cats);
         }
         getCategories();
+    }, []);
+
+    useEffect(()=>{
+        const getRecentAds = async () => {
+            const json = await api.getAds({
+                sort: 'desc',
+                limit: 8
+            });
+            setAdList(json.ads)
+        }
+        getRecentAds();
     }, []);
 
     return (
@@ -60,7 +73,16 @@ const Home = () => {
             <C.Container>
                 <C.Title></C.Title>
                 <PageArea>
-                    ...
+                    <h2>Anúncios Recentes</h2>
+                    <div className="list" >
+                        {adList.map((i, k)=>
+                            <AdItem key={k} data={i} />
+                        )}
+                    </div>
+                    <Link to="/ads" className="seeAllLink">Ver Todos</Link>
+                    <hr />
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam nec viverra dolor. In pulvinar lacinia purus, at dictum massa. Vivamus accumsan blandit elit id posuere. Vestibulum fermentum gravida scelerisque. Suspendisse dapibus ex ac elementum dictum. Duis vehicula auctor orci, in varius libero vestibulum ornare. Maecenas tempor vitae quam non ullamcorper. Nunc non magna elit.</p>
                 </PageArea>
             </C.Container>
         </>
