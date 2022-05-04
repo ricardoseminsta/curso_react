@@ -1,6 +1,12 @@
-import { PageArea, Fake } from'./styled';
-import { useParams } from 'react-router-dom';
+import { PageArea, Fake, OthersArea, BreadCrumb } from './styled';
 import * as C from '../../components/MainComponents'
+import AdItem from '../../components/partials/AdItem'
+
+import { Link, useParams } from 'react-router-dom';
+import { Slide } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css'
+
+
 import useApi from '../../helpers/OlxApi'
 import { useState, useEffect } from 'react'
 
@@ -11,14 +17,14 @@ const AdPage = () => {
     const [loading, setLoading] = useState(true);
     const [adInfo, setAdinfo] = useState({});
 
-    useEffect(()=>{
+    useEffect(() => {
         const getadInfo = async (id) => {
             const json = await api.getAd(id, true);
             setAdinfo(json);
             setLoading(false);
         }
         getadInfo(id);
-    }, [])
+    }, [id])
 
     const formatDate = (date) => {
         let cDate = new Date(date);
@@ -33,11 +39,31 @@ const AdPage = () => {
 
     return (
         <C.Container>
+            {adInfo.category && 
+            <BreadCrumb>
+                Você está aqui:
+                <Link to="/">Home</Link>
+                /
+                <Link to={`/ads?state=${adInfo.stateName}`}>{adInfo.stateName}</Link>
+                /
+                <Link to={`/ads?state=${adInfo.stateName}&cat=${adInfo.category.slug}`}>{adInfo.category.name}</Link>
+                / {adInfo.title}
+            </BreadCrumb>
+            }
             <PageArea>
                 <div className="leftSide">
                     <div className="box">
                         <div className="adImage">
                             {loading && <Fake height={300} />}
+                            {adInfo.images &&
+                                <Slide>
+                                    {adInfo.images.map((img, k) =>
+                                        <div key={k} className="each-slide">
+                                            <img src={img} alt="" />
+                                        </div>
+                                    )}
+                                </Slide>
+                            }
                         </div>
                         <div className="adInfo">
                             <div className="adName">
@@ -63,12 +89,40 @@ const AdPage = () => {
                 <div className="rightSide">
                     <div className="box box--padding">
                         {loading && <Fake height={20} />}
+                        {adInfo.priceNegotiable &&
+                            "Preço Negociável"
+                        }
+                        {!adInfo.priceNegotiable && adInfo.price &&
+                            <div className="price">Preço: <span>R$ {adInfo.price}</span></div>
+                        }
                     </div>
-                    <div className="box box--padding">
-                        {loading && <Fake height={50} />}
-                    </div>
+                    {loading && <Fake height={50} />}
+                    {adInfo.userInfo &&
+
+                        <>
+                            <a href={`mailto:${adInfo.userInfo.email}`} target="_blank" className="contactSellerLink">Fale com o vendedor</a>
+                            <div className="box box--padding createdBy">
+                                <strong>{adInfo.userInfo.name}</strong>
+                                <small>E-mail: {adInfo.userInfo.email}</small>
+                                <small>Estado: {adInfo.stateName}</small>
+                            </div>
+                        </>
+
+                    }
                 </div>
             </PageArea>
+            <OthersArea>
+                {adInfo.others &&
+                    <>
+                        <h2>Outras Ofertas do Vendedor</h2>
+                        <div className="list">
+                            {adInfo.others.map((i, k) =>
+                                <AdItem key={k} data={i}/>
+                            )}
+                        </div>
+                    </>
+                }
+            </OthersArea>
         </C.Container>
     );
 }
