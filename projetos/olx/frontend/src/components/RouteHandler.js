@@ -1,11 +1,11 @@
 import react from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
-export default ({ chidren, ...rest }) => {
-    return (
-        <Route
-            {...rest}
-            render={() => chidren}
-        />
-    );
+import { isLogged } from '../helpers/AuthHandler'
+
+export default ({ children, ...rest }) => {
+    let logged = isLogged();
+    let authorized = (rest.private && !logged) ? false : true;
+
+    return ( authorized ? children : <Navigate to="/signin" />);
 }
