@@ -1,9 +1,10 @@
 import './styled';
-import React from 'react';
-import { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import useApi from '../../helpers/OlxApi'
-import { doLogin } from '../../helpers/AuthHandler';
+
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import MaskedInput from 'react-text-mask';
 
 import * as C from '../../components/MainComponents'
 import { PageArea } from './styled';
@@ -14,6 +15,8 @@ const AddAd = () => {
 
     const fileField = useRef();
 
+    const [categories, setCategories] = useState([]);
+
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [price, setPrice] = useState('');
@@ -23,6 +26,13 @@ const AddAd = () => {
     const [disabled, setDisable] = useState(false);
     const [error, setError] = useState('');
 
+    useEffect(()=>{
+        const getCategories = async () => {
+            const cats = await api.getCategories();
+            setCategories(cats);
+        }
+        getCategories();
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,6 +53,13 @@ const AddAd = () => {
 
     }
 
+    const priceMask = createNumberMask({
+        prefix: 'R$ ',
+        includeThousandsSeparator: true,
+        thousandsSeparatorSymbol: '.',
+        allowDecimal: true,
+        decimalSymbol: ','
+    });
 
     return (
         <C.Container>
@@ -68,13 +85,28 @@ const AddAd = () => {
                     <label className="area">
                         <div className="area--title">Categoria:</div>
                         <div className="area--input">
-                            <select></select>
+                            <select
+                                disabled={disabled}
+                                onChange={e=>setCategory(e.target.value)}
+                                required
+                            >
+                                <option></option>
+                                {categories && categories.map((i, k)=>
+                                    <option key={k} value={i._id}>{i.name}</option>
+                                )}
+                            </select>
                         </div>
                     </label>
                     <label className="area">
                         <div className="area--title">Preço:</div>
                         <div className="area--input">
-                            ...
+                            <MaskedInput
+                            mask={priceMask}
+                            placeholder="R$ "
+                            disabled={disabled || priceNegotiable}
+                            value={price}
+                            onChange={e=>setPrice(e.target.value)}
+                            />
                         </div>
                     </label>
                     <label className="area">
