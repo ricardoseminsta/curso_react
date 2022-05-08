@@ -1,5 +1,6 @@
 import './styled';
 import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom'
 
 import useApi from '../../helpers/OlxApi'
 
@@ -12,8 +13,8 @@ import { PageArea } from './styled';
 
 const AddAd = () => {
     const api = useApi();
-
     const fileField = useRef();
+    const navigate = useNavigate();
 
     const [categories, setCategories] = useState([]);
 
@@ -38,16 +39,41 @@ const AddAd = () => {
         e.preventDefault();
         setDisable(true);
         setError('');
-        /*        
-        const json = await api.login(email, password);
+        let errors = [];
 
-        if(json.error) {
-            setError(json.error);
+        if(!title.trim()) {
+            errors.push('Sem título');
+        }
+        if(!category) {
+            errors.push('Sem Categoria')
+        }
+
+        if(errors.length === 0) {
+
+            const fData = new FormData();
+            fData.append('title', title);
+            fData.append('price', price);
+            fData.append('priceneg', priceNegotiable);
+            fData.append('desc', description);
+            fData.append('cat', category);
+
+            if(fileField.current.files.length > 0) {
+                for(let i = 0; i < fileField.current.files.length; i++) {
+                    fData.append('img', fileField.current.files[i]);
+                }
+            }
+
+            const json = await api.addAd(fData);
+
+            if(!json.error) {
+                navigate(`/ad/${json.id}`);
+            } else {
+                setError(json.error);
+            }
+
         } else {
-            doLogin(json.token, rememberPassword);
-            //navigate('/');
-            window.location.href = '/';
-        }*/
+            setError(errors.join("\n"));
+        }
 
         setDisable(false);
 
@@ -74,7 +100,7 @@ const AddAd = () => {
                         <div className="area--title">Título:</div>
                         <div className="area--input">
                             <input
-                                type="email"
+                                type="text"
                                 disabled={disabled}
                                 value={title}
                                 onChange={e=>setTitle(e.target.value)}

@@ -6,6 +6,29 @@ const BASEAPI = 'http://alunos.b7web.com.br:501';
 
 //const navigate = useNavigate();
 
+const apiFetchFile = async(endpoint, body) => {
+    if(!body.token) {
+        let token = Cookies.get('token');
+        if(token) {
+            body.append('token', token); 
+        }
+    }
+
+    const res = await fetch(BASEAPI+endpoint, {
+        method: 'POST',
+        body
+    });
+    const json = await res.json();
+
+    if(json.notallowed) {
+        //navigate('/signin');
+        window.location.href = '/signin';
+        return;
+    }
+
+    return json;
+}
+
 const apiFetchPost = async (endpoint, body) => {
     if(!body.token) {
         let token = Cookies.get('token');
@@ -78,12 +101,14 @@ const OlxApi = {
         );
         return json.states;
     },
+
     getCategories: async () => {
         const json = await apiFetchGet(
             '/categories'
         );
         return json.categories;
     },
+
     getAds: async (options) => {
         const json = await apiFetchGet(
             '/ad/list',
@@ -91,10 +116,19 @@ const OlxApi = {
         );
         return json;
     },
+
     getAd: async (id, other = false) => {
         const json = await apiFetchGet(
             '/ad/item',
             { id, other }
+        );
+        return json;
+    },
+
+    addAd: async (fData) => {
+        const json = await apiFetchFile(
+            '/ad/add',
+            fData
         );
         return json;
     }
