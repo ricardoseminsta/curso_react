@@ -62,7 +62,7 @@ const Home = () => {
                     </div>
                     <div className="categoryList">
                         {categories.map((i, k) =>
-                            <Link key={k} to={`/ads?cats=${i.slug}`} className="categoryItem">
+                            <Link key={k} to={`/ads?cat=${i.slug}`} className="categoryItem">
                                 <img src={i.img} alt=""/>
                                 <span>{i.name}</span>
                             </Link>
