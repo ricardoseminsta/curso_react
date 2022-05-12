@@ -109,6 +109,18 @@ const Ads = () => {
         pagination.push(i)
     }
 
+    const setPrevPage = () => {
+        if(currentPage > 1) {
+            setCurrentPage(currentPage - 1)
+        }
+    }
+    
+    const setNextPage = () => {
+        if(currentPage < pagination.length - 1) {
+            setCurrentPage(currentPage + 1)
+        }
+    }
+
     return (
         <C.Container>
             <PageArea>
@@ -157,14 +169,13 @@ const Ads = () => {
                         )}
                     </div>
                     <div className="pagination">
-                        {pagination.map((i, k) =>
-                            <div
-                                className={i === currentPage ? 'pagItem active' : 'pagItem'}
-                                onClick={()=>setCurrentPage(i)}
-                                >
-                                {i}
-                                </div>
-                        )}
+                            {pagination &&
+                            <>
+                            <div className="nextPage" onClick={() => setPrevPage()}>{'<'}</div>
+                            <div>Pagina {currentPage} de {pageCount - 1}</div>
+                            <div className="nextPage" onClick={() => setNextPage()}>{'>'}</div>
+                            </>
+                        }
                     </div>
                 </div>
             </PageArea>

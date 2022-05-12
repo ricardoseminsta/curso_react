@@ -87,7 +87,7 @@ export const PageArea = styled.div`
             justify-content: center;
             margin: 10px 0;
 
-            .pagItem {
+            .nextPage {
                 width: 30px;
                 height: 30px;
                 border: 1px solid #000000;
@@ -95,7 +95,7 @@ export const PageArea = styled.div`
                 align-items: center;
                 justify-content: center;
                 font-size: 12px;
-                margin-right: 5px;
+                margin: 5px 10px;
                 cursor: pointer;
 
                 &:hover {
